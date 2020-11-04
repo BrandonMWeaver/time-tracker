@@ -12,12 +12,16 @@ namespace TimeTrackerUI.ViewModels
 
         public TaskViewModel()
         {
-            this.TaskModels = new ObservableCollection<TaskModel>()
+            this.TaskModels = new ObservableCollection<TaskModel>();
+            for (int i = 0; i < 50; i++)
             {
-                new TaskModel("Example")
-            };
-            this.TaskModels[0].Start();
-            this.TaskModels[0].End();
+                this.TaskModels.Add(new TaskModel($"Example {i + 1:00}"));
+            }
+            foreach (TaskModel taskModel in this.TaskModels)
+            {
+                taskModel.Start();
+                taskModel.End();
+            }
         }
     }
 }

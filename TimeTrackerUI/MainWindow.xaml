@@ -7,7 +7,7 @@
         xmlns:v="clr-namespace:TimeTrackerUI.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="5">
+    <Grid>
         <v:TaskView />
     </Grid>
 </Window>
