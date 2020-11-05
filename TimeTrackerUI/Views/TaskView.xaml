@@ -29,6 +29,7 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0"
                                       Margin="0 0 10 0"
@@ -44,7 +45,7 @@
                                     <TextBlock Margin="5"
                                                TextAlignment="Center"
                                                FontFamily="Consolas"
-                                               Text="{Binding StartTime}" />
+                                               Text="{Binding StartTimeString}" />
                                 </Grid>
                                 <Grid Grid.Column="2"
                                       Margin="0 0 10 0"
@@ -52,7 +53,15 @@
                                     <TextBlock Margin="5"
                                                TextAlignment="Center"
                                                FontFamily="Consolas"
-                                               Text="{Binding EndTime}" />
+                                               Text="{Binding EndTimeString}" />
+                                </Grid>
+                                <Grid Grid.Column="3"
+                                      Margin="0 0 10 0"
+                                      Background="#9B9B9B">
+                                    <TextBlock Margin="5"
+                                               TextAlignment="Center"
+                                               FontFamily="Consolas"
+                                               Text="{Binding DurationString}" />
                                 </Grid>
                             </Grid>
                         </DataTemplate>
