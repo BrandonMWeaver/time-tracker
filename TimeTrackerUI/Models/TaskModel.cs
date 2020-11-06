@@ -51,11 +51,6 @@ namespace TimeTrackerUI.Models
 
         public TimeSpan Duration { get; set; }
 
-        public TaskModel(string type)
-        {
-            this.Type = type;
-        }
-
         public void Start()
         {
             this.StartTime = DateTime.Now;

@@ -15,6 +15,10 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <Button Grid.Row="0"
+                Margin="10 10 10 0"
+                Content="{Binding StartEndToggleControl.Content}"
+                Command="{Binding StartEndToggleControl.Command}" />
         <Grid Grid.Row="1"
               Margin="10"
               Background="#CDCDCD">
