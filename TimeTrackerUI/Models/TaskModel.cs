@@ -20,13 +20,36 @@ namespace TimeTrackerUI.Models
 
         public string DurationString
         {
-            get { return this.Duration.ToString(@"h\:mm"); }
+            get { return $"{(int)this.Duration.TotalHours}:{this.Duration.Minutes:00}"; }
         }
 
-        private DateTime StartTime { get; set; }
-        private DateTime EndTime { get; set; }
+        private DateTime _startTime;
 
-        private TimeSpan Duration { get; set; }
+        public DateTime StartTime
+        {
+            get { return this._startTime; }
+            set
+            {
+                this._startTime = value;
+                if (this.EndTime != null)
+                    this.SetDuration();
+            }
+        }
+
+        private DateTime _endTime;
+
+        public DateTime EndTime
+        {
+            get { return this._endTime; }
+            set
+            {
+                this._endTime = value;
+                if (this.StartTime != null)
+                    this.SetDuration();
+            }
+        }
+
+        public TimeSpan Duration { get; set; }
 
         public TaskModel(string type)
         {
@@ -36,15 +59,11 @@ namespace TimeTrackerUI.Models
         public void Start()
         {
             this.StartTime = DateTime.Now;
-            if (this.EndTime != null)
-                this.SetDuration();
         }
 
         public void End()
         {
             this.EndTime = DateTime.Now;
-            if (this.StartTime != null)
-                this.SetDuration();
         }
 
         private void SetDuration()
