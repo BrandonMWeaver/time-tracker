@@ -22,6 +22,7 @@ namespace TimeTrackerUI.ViewModels.Controls
                 this.OnPropertyChanged(nameof(this.CanStart));
 
                 this.Content = value ? "Start Task" : "End Task";
+                this.Background = value ? "#056937" : "#690537";
                 this.Command = value ? new ParameterlessCommand(this._action1) : new ParameterlessCommand(this._action2);
             }
         }
@@ -35,6 +36,18 @@ namespace TimeTrackerUI.ViewModels.Controls
             {
                 this._content = value;
                 this.OnPropertyChanged(nameof(this.Content));
+            }
+        }
+
+        private string _background;
+
+        public string Background
+        {
+            get { return this._background; }
+            set
+            {
+                this._background = value;
+                this.OnPropertyChanged(nameof(this.Background));
             }
         }
 

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Text;
 using TimeTrackerUI.Models;
 using TimeTrackerUI.Models.Base;
-using TimeTrackerUI.ViewModels.Commands;
 using TimeTrackerUI.ViewModels.Controls;
 
 namespace TimeTrackerUI.ViewModels
@@ -25,15 +24,29 @@ namespace TimeTrackerUI.ViewModels
             }
         }
 
+        private string _currentTaskModelType;
+
+        public string CurrentTaskModelType
+        {
+            get { return this._currentTaskModelType; }
+            set
+            {
+                this._currentTaskModelType = value;
+                this.OnPropertyChanged(nameof(this.CurrentTaskModelType));
+            }
+        }
+
+        public string[] TaskModelTypes { get; set; }
+
         public StartEndToggleControl StartEndToggleControl { get; set; }
 
         public TaskViewModel()
         {
             this.TaskModels = new ObservableCollection<TaskModel>();
-            this.CurrentTaskModel = new TaskModel
-            {
-                Type = "Example"
-            };
+            this.TaskModelTypes = new string[] { "Example A", "Example B", "Example C" };
+
+            this.CurrentTaskModel = new TaskModel();
+            this.CurrentTaskModelType = this.TaskModelTypes[0];
 
             this.StartEndToggleControl = new StartEndToggleControl(this.Start, this.End)
             {
@@ -50,12 +63,15 @@ namespace TimeTrackerUI.ViewModels
         private void End()
         {
             this.CurrentTaskModel.End();
-            this.TaskModels.Add(CurrentTaskModel);
-            this.CurrentTaskModel = new TaskModel()
-            {
-                Type = "Example"
-            };
             this.StartEndToggleControl.CanStart = true;
+            this.Add();
+        }
+
+        private void Add()
+        {
+            this.CurrentTaskModel.Type = this.CurrentTaskModelType;
+            this.TaskModels.Add(this.CurrentTaskModel);
+            this.CurrentTaskModel = new TaskModel();
         }
     }
 }

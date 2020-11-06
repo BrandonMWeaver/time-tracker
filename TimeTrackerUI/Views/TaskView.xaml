@@ -15,10 +15,36 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0"
-                Margin="10 10 10 0"
-                Content="{Binding StartEndToggleControl.Content}"
-                Command="{Binding StartEndToggleControl.Command}" />
+        <Grid Grid.Row="0"
+              Margin="10 0 10 0"
+              Background="#CDCDCD">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0"
+                          Margin="10 10 5 10"
+                          Padding="5"
+                          FontFamily="Consolas"
+                          BorderThickness="0"
+                          ItemsSource="{Binding TaskModelTypes}"
+                          SelectedItem="{Binding CurrentTaskModelType, Mode=TwoWay}" />
+                <Button Grid.Column="1"
+                        Margin="5 10 10 10"
+                        Padding="5"
+                        FontFamily="Consolas"
+                        Foreground="#FFF"
+                        BorderThickness="0"
+                        Content="{Binding StartEndToggleControl.Content}"
+                        Background="{Binding StartEndToggleControl.Background}"
+                        Command="{Binding StartEndToggleControl.Command}" />
+            </Grid>
+        </Grid>
         <Grid Grid.Row="1"
               Margin="10"
               Background="#CDCDCD">
