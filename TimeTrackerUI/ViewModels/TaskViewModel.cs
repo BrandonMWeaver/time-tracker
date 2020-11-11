@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using TimeTrackerUI.Models;
 using TimeTrackerUI.Models.Base;
@@ -36,6 +37,30 @@ namespace TimeTrackerUI.ViewModels
             }
         }
 
+        private string _timeTotalString;
+
+        public string TimeTotalString
+        {
+            get { return this._timeTotalString; }
+            set
+            {
+                this._timeTotalString = value;
+                this.OnPropertyChanged(nameof(this.TimeTotalString));
+            }
+        }
+
+        private ObservableCollection<string> _timeTotalStrings;
+
+        public ObservableCollection<string> TimeTotalStrings
+        {
+            get { return this._timeTotalStrings; }
+            set
+            {
+                this._timeTotalStrings = value;
+                this.OnPropertyChanged(nameof(this.TimeTotalStrings));
+            }
+        }
+
         public string[] TaskModelTypes { get; set; }
 
         public StartEndToggleControl StartEndToggleControl { get; set; }
@@ -43,10 +68,13 @@ namespace TimeTrackerUI.ViewModels
         public TaskViewModel()
         {
             this.TaskModels = new ObservableCollection<TaskModel>();
-            this.TaskModelTypes = new string[] { "Example A", "Example B", "Example C" };
+            this.TaskModelTypes = new string[] { "Example A", "Example B", "Example C", "Example D", "Example E" };
 
             this.CurrentTaskModel = new TaskModel();
             this.CurrentTaskModelType = this.TaskModelTypes[0];
+
+            this.TimeTotalString = "Time Total: 0:00:00";
+            this.TimeTotalStrings = new ObservableCollection<string>();
 
             this.StartEndToggleControl = new StartEndToggleControl(this.Start, this.End)
             {
@@ -72,6 +100,31 @@ namespace TimeTrackerUI.ViewModels
             this.CurrentTaskModel.Type = this.CurrentTaskModelType;
             this.TaskModels.Add(this.CurrentTaskModel);
             this.CurrentTaskModel = new TaskModel();
+            this.GetTimeTotalStrings();
+        }
+
+        private void GetTimeTotalStrings()
+        {
+            this.TimeTotalStrings = new ObservableCollection<string>();
+
+            TimeSpan timeSpan = new TimeSpan();
+            foreach (TaskModel taskModel in this.TaskModels)
+                timeSpan = timeSpan.Add(taskModel.Duration);
+            this.TimeTotalString = $"Time Total: {(int)timeSpan.TotalHours}:{timeSpan.Minutes:00}:{timeSpan.Seconds:00}";
+
+            foreach (string taskModelType in this.TaskModelTypes)
+            {
+                timeSpan = new TimeSpan();
+                bool isTimed = false;
+                foreach (TaskModel taskModel in this.TaskModels.Where(t => t.Type == taskModelType))
+                {
+                    timeSpan = timeSpan.Add(taskModel.Duration);
+                    if (!isTimed)
+                        isTimed = true;
+                }
+                if (isTimed)
+                    this.TimeTotalStrings.Add($"{taskModelType} Time: {(int)timeSpan.TotalHours}:{timeSpan.Minutes:00}:{timeSpan.Seconds:00}");
+            }
         }
     }
 }

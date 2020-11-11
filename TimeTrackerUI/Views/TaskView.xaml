@@ -13,6 +13,7 @@
     <Grid DataContext="{StaticResource TaskViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
@@ -25,12 +26,13 @@
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="150" />
                 </Grid.ColumnDefinitions>
                 <ComboBox Grid.Column="0"
                           Margin="10 10 5 10"
                           Padding="5"
                           FontFamily="Consolas"
+                          FontSize="15"
                           BorderThickness="0"
                           ItemsSource="{Binding TaskModelTypes}"
                           SelectedItem="{Binding CurrentTaskModelType, Mode=TwoWay}" />
@@ -38,6 +40,7 @@
                         Margin="5 10 10 10"
                         Padding="5"
                         FontFamily="Consolas"
+                        FontSize="15"
                         Foreground="#FFF"
                         BorderThickness="0"
                         Content="{Binding StartEndToggleControl.Content}"
@@ -67,6 +70,7 @@
                                     <TextBlock Margin="5"
                                                TextAlignment="Center"
                                                FontFamily="Consolas"
+                                               FontSize="15"
                                                Text="{Binding Type}" />
                                 </Grid>
                                 <Grid Grid.Column="1"
@@ -75,6 +79,7 @@
                                     <TextBlock Margin="5"
                                                TextAlignment="Center"
                                                FontFamily="Consolas"
+                                               FontSize="15"
                                                Text="{Binding StartTimeString}" />
                                 </Grid>
                                 <Grid Grid.Column="2"
@@ -83,6 +88,7 @@
                                     <TextBlock Margin="5"
                                                TextAlignment="Center"
                                                FontFamily="Consolas"
+                                               FontSize="15"
                                                Text="{Binding EndTimeString}" />
                                 </Grid>
                                 <Grid Grid.Column="3"
@@ -91,8 +97,39 @@
                                     <TextBlock Margin="5"
                                                TextAlignment="Center"
                                                FontFamily="Consolas"
+                                               FontSize="15"
                                                Text="{Binding DurationString}" />
                                 </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="2"
+              Margin="10 0 10 10"
+              Background="#CDCDCD">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Margin="10 10 10 0"
+                       TextAlignment="Center"
+                       FontFamily="Consolas"
+                       FontSize="15"
+                       Text="{Binding TimeTotalString}" />
+            <ScrollViewer Grid.Row="1"
+                          Margin="10"
+                          Background="#9B9B9B">
+                <ItemsControl ItemsSource="{Binding TimeTotalStrings}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Margin="5"
+                                           FontFamily="Consolas"
+                                           FontSize="15"
+                                           Text="{Binding}" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
