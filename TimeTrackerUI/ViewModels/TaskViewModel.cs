@@ -66,6 +66,8 @@ namespace TimeTrackerUI.ViewModels
 
         public StartEndToggleControl StartEndToggleControl { get; set; }
 
+        public Command<TaskModel> SetCurrentTaskModelCommand { get; set; }
+
         public ParameterlessCommand AddCommand { get; set; }
 
         public TaskViewModel()
@@ -84,11 +86,20 @@ namespace TimeTrackerUI.ViewModels
                 CanStart = true
             };
 
+            this.SetCurrentTaskModelCommand = new Command<TaskModel>(this.SetCurrentTaskModel);
+
             this.AddCommand = new ParameterlessCommand(this.Add);
+        }
+
+        private void SetCurrentTaskModel(TaskModel taskModel)
+        {
+            this.CurrentTaskModel = taskModel;
+            this.StartEndToggleControl.CanStart = true;
         }
 
         private void Start()
         {
+            this.CurrentTaskModel = new TaskModel();
             this.CurrentTaskModel.Start();
             this.StartEndToggleControl.CanStart = false;
         }

@@ -105,6 +105,7 @@
               Background="#CDCDCD">
             <ScrollViewer Margin="10">
                 <ItemsControl ItemsSource="{Binding TaskModels}"
+                              x:Name="TaskModelsControl"
                               Margin="0 0 0 -10">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -116,15 +117,17 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0"
-                                      Margin="0 0 10 0"
-                                      Background="#9B9B9B">
-                                    <TextBlock Margin="5"
-                                               TextAlignment="Center"
+                                <Button Grid.Column="0"
+                                        Margin="0 0 10 0"
+                                        BorderThickness="0"
+                                        Background="#9B9B9B"
+                                        Command="{Binding ElementName=TaskModelsControl, Path=DataContext.SetCurrentTaskModelCommand}"
+                                        CommandParameter="{Binding}">
+                                    <TextBlock TextAlignment="Center"
                                                FontFamily="Consolas"
                                                FontSize="15"
                                                Text="{Binding Type}" />
-                                </Grid>
+                                </Button>
                                 <Grid Grid.Column="1"
                                       Margin="0 0 10 0"
                                       Background="#9B9B9B">
