@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TimeTrackerUI.Models.Base;
 
 namespace TimeTrackerUI.Models
 {
-    class TaskModel
+    class TaskModel : NotificationBase
     {
         public string Type { get; set; }
 
@@ -31,6 +32,7 @@ namespace TimeTrackerUI.Models
             set
             {
                 this._startTime = value;
+                this.OnPropertyChanged(nameof(this.StartTime));
                 if (this.EndTime != null)
                     this.SetDuration();
             }
@@ -44,6 +46,7 @@ namespace TimeTrackerUI.Models
             set
             {
                 this._endTime = value;
+                this.OnPropertyChanged(nameof(this.EndTime));
                 if (this.StartTime != null)
                     this.SetDuration();
             }

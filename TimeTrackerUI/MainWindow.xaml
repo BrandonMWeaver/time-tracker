@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TimeTrackerUI"
         xmlns:v="clr-namespace:TimeTrackerUI.Views"
         mc:Ignorable="d"
-        Title="Time Tracker" Height="600" MinHeight="450" Width="900" MinWidth="450">
+        Title="Time Tracker" Height="600" MinHeight="600" Width="900" MinWidth="450">
     <Grid>
         <v:TaskView />
     </Grid>

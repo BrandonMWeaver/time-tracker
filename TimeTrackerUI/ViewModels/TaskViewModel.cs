@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using TimeTrackerUI.Models;
 using TimeTrackerUI.Models.Base;
+using TimeTrackerUI.ViewModels.Commands;
 using TimeTrackerUI.ViewModels.Controls;
 
 namespace TimeTrackerUI.ViewModels
@@ -65,6 +66,8 @@ namespace TimeTrackerUI.ViewModels
 
         public StartEndToggleControl StartEndToggleControl { get; set; }
 
+        public ParameterlessCommand AddCommand { get; set; }
+
         public TaskViewModel()
         {
             this.TaskModels = new ObservableCollection<TaskModel>();
@@ -80,6 +83,8 @@ namespace TimeTrackerUI.ViewModels
             {
                 CanStart = true
             };
+
+            this.AddCommand = new ParameterlessCommand(this.Add);
         }
 
         private void Start()
@@ -92,7 +97,6 @@ namespace TimeTrackerUI.ViewModels
         {
             this.CurrentTaskModel.End();
             this.StartEndToggleControl.CanStart = true;
-            this.Add();
         }
 
         private void Add()
