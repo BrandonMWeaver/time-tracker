@@ -14,17 +14,7 @@ namespace TimeTrackerUI.ViewModels
     {
         public ObservableCollection<TaskModel> TaskModels { get; set; }
 
-        private TaskModel _currentTaskModel;
-
-        public TaskModel CurrentTaskModel
-        {
-            get { return this._currentTaskModel; }
-            set
-            {
-                this._currentTaskModel = value;
-                this.OnPropertyChanged(nameof(this.CurrentTaskModel));
-            }
-        }
+        public SelectedTaskModelControl SelectedTaskModelControl { get; set; }
 
         private string _currentTaskModelType;
 
@@ -75,7 +65,8 @@ namespace TimeTrackerUI.ViewModels
             this.TaskModels = new ObservableCollection<TaskModel>();
             this.TaskModelTypes = new string[] { "Example A", "Example B", "Example C", "Example D", "Example E" };
 
-            this.CurrentTaskModel = new TaskModel();
+            this.SelectedTaskModelControl = new SelectedTaskModelControl();
+            this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
             this.CurrentTaskModelType = this.TaskModelTypes[0];
 
             this.TimeTotalString = "Time Total: 0:00:00";
@@ -93,28 +84,31 @@ namespace TimeTrackerUI.ViewModels
 
         private void SetCurrentTaskModel(TaskModel taskModel)
         {
-            this.CurrentTaskModel = taskModel;
+            this.SelectedTaskModelControl.SelectedTaskModel = taskModel;
             this.StartEndToggleControl.CanStart = true;
+
+            if (this.TaskModels.Contains(taskModel))
+                this.SelectedTaskModelControl.IsSelectedTaskModelTracked = true;
         }
 
         private void Start()
         {
-            this.CurrentTaskModel = new TaskModel();
-            this.CurrentTaskModel.Start();
+            this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
+            this.SelectedTaskModelControl.SelectedTaskModel.Start();
             this.StartEndToggleControl.CanStart = false;
         }
 
         private void End()
         {
-            this.CurrentTaskModel.End();
+            this.SelectedTaskModelControl.SelectedTaskModel.End();
             this.StartEndToggleControl.CanStart = true;
         }
 
         private void Add()
         {
-            this.CurrentTaskModel.Type = this.CurrentTaskModelType;
-            this.TaskModels.Add(this.CurrentTaskModel);
-            this.CurrentTaskModel = new TaskModel();
+            this.SelectedTaskModelControl.SelectedTaskModel.Type = this.CurrentTaskModelType;
+            this.TaskModels.Add(this.SelectedTaskModelControl.SelectedTaskModel);
+            this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
             this.GetTimeTotalStrings();
         }
 
