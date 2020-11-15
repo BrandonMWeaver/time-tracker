@@ -128,7 +128,7 @@
                         Content="Remove"
                         BorderThickness="0"
                         Background="#9B9B9B"
-                        Command="{}" />
+                        Command="{Binding RemoveCommand}" />
             </Grid>
         </Grid>
         <Grid Grid.Row="2"
@@ -145,7 +145,7 @@
                             Padding="5"
                             BorderThickness="0"
                             Background="#9B9B9B"
-                            Command="{}">
+                            Command="{Binding SetNewCurrentTaskModelCommand}">
                         <TextBlock TextAlignment="Center"
                                    FontFamily="Consolas"
                                    FontSize="15"

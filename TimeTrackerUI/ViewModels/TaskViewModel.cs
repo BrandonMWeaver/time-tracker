@@ -58,7 +58,9 @@ namespace TimeTrackerUI.ViewModels
 
         public Command<TaskModel> SetCurrentTaskModelCommand { get; set; }
 
+        public ParameterlessCommand SetNewCurrentTaskModelCommand { get; set; }
         public ParameterlessCommand AddCommand { get; set; }
+        public ParameterlessCommand RemoveCommand { get; set; }
 
         public TaskViewModel()
         {
@@ -79,7 +81,14 @@ namespace TimeTrackerUI.ViewModels
 
             this.SetCurrentTaskModelCommand = new Command<TaskModel>(this.SetCurrentTaskModel);
 
+            this.SetNewCurrentTaskModelCommand = new ParameterlessCommand(this.SetNewCurrentTaskModel);
             this.AddCommand = new ParameterlessCommand(this.Add);
+            this.RemoveCommand = new ParameterlessCommand(this.Remove);
+        }
+
+        private void SetNewCurrentTaskModel()
+        {
+            this.SetCurrentTaskModel(new TaskModel());
         }
 
         private void SetCurrentTaskModel(TaskModel taskModel)
@@ -89,11 +98,12 @@ namespace TimeTrackerUI.ViewModels
 
             if (this.TaskModels.Contains(taskModel))
                 this.SelectedTaskModelControl.IsSelectedTaskModelTracked = true;
+            else
+                this.SelectedTaskModelControl.IsSelectedTaskModelTracked = false;
         }
 
         private void Start()
         {
-            this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
             this.SelectedTaskModelControl.SelectedTaskModel.Start();
             this.StartEndToggleControl.CanStart = false;
         }
@@ -109,6 +119,14 @@ namespace TimeTrackerUI.ViewModels
             this.SelectedTaskModelControl.SelectedTaskModel.Type = this.CurrentTaskModelType;
             this.TaskModels.Add(this.SelectedTaskModelControl.SelectedTaskModel);
             this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
+            this.GetTimeTotalStrings();
+        }
+
+        private void Remove()
+        {
+            TaskModel temp = this.SelectedTaskModelControl.SelectedTaskModel;
+            this.TaskModels.Remove(temp);
+            this.SetCurrentTaskModel(new TaskModel());
             this.GetTimeTotalStrings();
         }
 
