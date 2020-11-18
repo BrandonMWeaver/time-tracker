@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using TimeTrackerUI.Models;
 using TimeTrackerUI.Models.Base;
 using TimeTrackerUI.ViewModels.Commands;
@@ -65,19 +67,46 @@ namespace TimeTrackerUI.ViewModels
 
         public TaskViewModel()
         {
-            this.TaskModels = new ObservableCollection<TaskModel>();
+            string applicationJson;
+            using (StreamReader sr = new StreamReader("../../../Storage/Data.json"))
+            {
+                applicationJson = sr.ReadToEnd();
+            }
+            ApplicationState applicationState;
+            if (applicationJson != string.Empty)
+                applicationState = JsonSerializer.Deserialize<ApplicationState>(applicationJson);
+            else
+                applicationState = new ApplicationState()
+                {
+                    TaskModels = new TaskModel[0],
+                    CurrentTaskModel = new TaskModel(),
+                    IsSelectedTaskModelTracked = false
+                };
+            this.TaskModels = new ObservableCollection<TaskModel>(applicationState.TaskModels);
+
+            TaskModel selectedTaskModel = new TaskModel();
+            foreach (TaskModel taskModel in this.TaskModels)
+            {
+                taskModel.SetDuration();
+                if (taskModel.Equals(applicationState.CurrentTaskModel))
+                    selectedTaskModel = taskModel;
+            }
             this.TaskModelTypes = new string[] { "Example A", "Example B", "Example C", "Example D", "Example E" };
 
-            this.SelectedTaskModelControl = new SelectedTaskModelControl();
-            this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
+            this.SelectedTaskModelControl = new SelectedTaskModelControl
+            {
+                SelectedTaskModel = selectedTaskModel.Type == null ? applicationState.CurrentTaskModel : selectedTaskModel,
+                IsSelectedTaskModelTracked = applicationState.IsSelectedTaskModelTracked
+            };
             this.CurrentTaskModelType = this.TaskModelTypes[0];
 
             this.TimeTotalString = "Time Total: 0:00:00";
             this.TimeTotalStrings = new ObservableCollection<string>();
+            this.GetTimeTotalStrings();
 
             this.StartEndToggleControl = new StartEndToggleControl(this.Start, this.End)
             {
-                CanStart = true
+                CanStart = applicationState.CanStartEndToggleControlStart
             };
 
             this.SetCurrentTaskModelCommand = new Command<TaskModel>(this.SetCurrentTaskModel);
@@ -102,18 +131,21 @@ namespace TimeTrackerUI.ViewModels
                 this.SelectedTaskModelControl.IsSelectedTaskModelTracked = true;
             else
                 this.SelectedTaskModelControl.IsSelectedTaskModelTracked = false;
+            this.Save();
         }
 
         private void Start()
         {
             this.SelectedTaskModelControl.SelectedTaskModel.Start();
             this.StartEndToggleControl.CanStart = false;
+            this.Save();
         }
 
         private void End()
         {
             this.SelectedTaskModelControl.SelectedTaskModel.End();
             this.StartEndToggleControl.CanStart = true;
+            this.Save();
         }
 
         private void Add()
@@ -122,6 +154,7 @@ namespace TimeTrackerUI.ViewModels
             this.TaskModels.Add(this.SelectedTaskModelControl.SelectedTaskModel);
             this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
             this.GetTimeTotalStrings();
+            this.Save();
         }
 
         private void Update()
@@ -133,6 +166,7 @@ namespace TimeTrackerUI.ViewModels
             this.TaskModels.Insert(index, temp);
             this.SetCurrentTaskModel(new TaskModel());
             GetTimeTotalStrings();
+            this.Save();
         }
 
         private void Remove()
@@ -141,6 +175,7 @@ namespace TimeTrackerUI.ViewModels
             this.TaskModels.Remove(temp);
             this.SetCurrentTaskModel(new TaskModel());
             this.GetTimeTotalStrings();
+            this.Save();
         }
 
         private void GetTimeTotalStrings()
@@ -165,6 +200,18 @@ namespace TimeTrackerUI.ViewModels
                 if (isTimed)
                     this.TimeTotalStrings.Add($"{taskModelType} Time: {(int)timeSpan.TotalHours}:{timeSpan.Minutes:00}:{timeSpan.Seconds:00}");
             }
+        }
+
+        private void Save()
+        {
+            string json = JsonSerializer.Serialize<ApplicationState>(new ApplicationState()
+            {
+                TaskModels = this.TaskModels.ToArray(),
+                CurrentTaskModel = this.SelectedTaskModelControl.SelectedTaskModel,
+                IsSelectedTaskModelTracked = this.SelectedTaskModelControl.IsSelectedTaskModelTracked,
+                CanStartEndToggleControlStart = this.StartEndToggleControl.CanStart
+            });
+            File.WriteAllText("../../../Storage/Data.json", json);
         }
     }
 }

@@ -64,9 +64,21 @@ namespace TimeTrackerUI.Models
             this.EndTime = DateTime.Now;
         }
 
-        private void SetDuration()
+        public void SetDuration()
         {
             this.Duration = this.EndTime - this.StartTime;
+        }
+
+        public override bool Equals(object obj)
+        {
+            TaskModel other = obj as TaskModel;
+
+            if (other == null)
+                return false;
+
+            return this.Type == other.Type
+                && this.StartTime == other.StartTime
+                && this.EndTime == other.EndTime;
         }
     }
 }
