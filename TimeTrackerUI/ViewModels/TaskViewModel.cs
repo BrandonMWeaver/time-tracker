@@ -60,6 +60,7 @@ namespace TimeTrackerUI.ViewModels
 
         public ParameterlessCommand SetNewCurrentTaskModelCommand { get; set; }
         public ParameterlessCommand AddCommand { get; set; }
+        public ParameterlessCommand UpdateCommand { get; set; }
         public ParameterlessCommand RemoveCommand { get; set; }
 
         public TaskViewModel()
@@ -83,6 +84,7 @@ namespace TimeTrackerUI.ViewModels
 
             this.SetNewCurrentTaskModelCommand = new ParameterlessCommand(this.SetNewCurrentTaskModel);
             this.AddCommand = new ParameterlessCommand(this.Add);
+            this.UpdateCommand = new ParameterlessCommand(this.Update);
             this.RemoveCommand = new ParameterlessCommand(this.Remove);
         }
 
@@ -120,6 +122,17 @@ namespace TimeTrackerUI.ViewModels
             this.TaskModels.Add(this.SelectedTaskModelControl.SelectedTaskModel);
             this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
             this.GetTimeTotalStrings();
+        }
+
+        private void Update()
+        {
+            this.SelectedTaskModelControl.SelectedTaskModel.Type = this.CurrentTaskModelType;
+            TaskModel temp = this.SelectedTaskModelControl.SelectedTaskModel;
+            int index = this.TaskModels.IndexOf(this.SelectedTaskModelControl.SelectedTaskModel);
+            this.TaskModels.Remove(this.SelectedTaskModelControl.SelectedTaskModel);
+            this.TaskModels.Insert(index, temp);
+            this.SetCurrentTaskModel(new TaskModel());
+            GetTimeTotalStrings();
         }
 
         private void Remove()

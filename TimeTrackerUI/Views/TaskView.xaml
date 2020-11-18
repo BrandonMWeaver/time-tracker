@@ -119,7 +119,7 @@
                         Content="Update"
                         BorderThickness="0"
                         Background="#9B9B9B"
-                        Command="{}" />
+                        Command="{Binding UpdateCommand}" />
                 <Button Grid.Column="1"
                         Margin="5 0 10 10"
                         Padding="5"
