@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -64,6 +65,7 @@ namespace TimeTrackerUI.ViewModels
         public ParameterlessCommand AddCommand { get; set; }
         public ParameterlessCommand UpdateCommand { get; set; }
         public ParameterlessCommand RemoveCommand { get; set; }
+        public ParameterlessCommand GenerateReportCommand { get; set; }
 
         public TaskViewModel()
         {
@@ -115,6 +117,7 @@ namespace TimeTrackerUI.ViewModels
             this.AddCommand = new ParameterlessCommand(this.Add);
             this.UpdateCommand = new ParameterlessCommand(this.Update);
             this.RemoveCommand = new ParameterlessCommand(this.Remove);
+            this.GenerateReportCommand = new ParameterlessCommand(this.GenerateReport);
         }
 
         private void SetNewCurrentTaskModel()
@@ -152,7 +155,7 @@ namespace TimeTrackerUI.ViewModels
         {
             this.SelectedTaskModelControl.SelectedTaskModel.Type = this.CurrentTaskModelType;
             this.TaskModels.Add(this.SelectedTaskModelControl.SelectedTaskModel);
-            this.SelectedTaskModelControl.SelectedTaskModel = new TaskModel();
+            this.SetCurrentTaskModel(new TaskModel());
             this.GetTimeTotalStrings();
             this.Save();
         }
@@ -212,6 +215,24 @@ namespace TimeTrackerUI.ViewModels
                 CanStartEndToggleControlStart = this.StartEndToggleControl.CanStart
             });
             File.WriteAllText("../../../Storage/Data.json", json);
+        }
+
+        private string ReportString()
+        {
+            string reportString = string.Empty;
+            foreach (TaskModel taskModel in this.TaskModels)
+                reportString = $"{reportString}{taskModel}\n";
+            return $"{reportString}{this.TimeTotalString}";
+        }
+
+        private void GenerateReport()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                Filter = "Text Files|*.txt"
+            };
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, this.ReportString());
         }
     }
 }

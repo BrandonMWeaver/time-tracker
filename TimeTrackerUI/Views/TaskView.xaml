@@ -15,7 +15,8 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="2*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
               Margin="10 0 10 0"
@@ -216,6 +217,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0"
                        Margin="10 10 10 0"
@@ -239,6 +241,15 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+            <Button Grid.Row="2"
+                    Margin="10 0 10 10"
+                    Padding="5"
+                    FontFamily="Consolas"
+                    FontSize="15"
+                    BorderThickness="0"
+                    Content="Generate Report"
+                    Background="#9B9B9B"
+                    Command="{Binding GenerateReportCommand}" />
         </Grid>
     </Grid>
 </UserControl>

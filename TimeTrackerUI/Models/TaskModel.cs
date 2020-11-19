@@ -59,6 +59,12 @@ namespace TimeTrackerUI.Models
             this.StartTime = DateTime.Now;
         }
 
+        public TaskModel()
+        {
+            this.StartTime = DateTime.Today;
+            this.EndTime = DateTime.Today;
+        }
+
         public void End()
         {
             this.EndTime = DateTime.Now;
@@ -79,6 +85,11 @@ namespace TimeTrackerUI.Models
             return this.Type == other.Type
                 && this.StartTime == other.StartTime
                 && this.EndTime == other.EndTime;
+        }
+
+        public override string ToString()
+        {
+            return $"{this.Type}: {this.StartTime} -> {this.EndTime}";
         }
     }
 }
