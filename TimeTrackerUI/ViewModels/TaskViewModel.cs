@@ -105,7 +105,7 @@ namespace TimeTrackerUI.ViewModels
                 SelectedTaskModel = selectedTaskModel.Type == null ? applicationState.CurrentTaskModel : selectedTaskModel,
                 IsSelectedTaskModelTracked = applicationState.IsSelectedTaskModelTracked
             };
-            this.CurrentTaskModelType = this.TaskModelTypes[0];
+            this.CurrentTaskModelType = this.SelectedTaskModelControl.SelectedTaskModel.Type == null ? this.TaskModelTypes[0] : this.SelectedTaskModelControl.SelectedTaskModel.Type;
 
             this.TimeTotalString = "Time Total: 0:00:00";
             this.TimeTotalStrings = new ObservableCollection<string>();
@@ -113,7 +113,8 @@ namespace TimeTrackerUI.ViewModels
 
             this.StartEndToggleControl = new StartEndToggleControl(this.Start, this.End)
             {
-                CanStart = applicationState.CanStartEndToggleControlStart
+                CanStart = applicationState.CanStartEndToggleControlStart,
+                IsEnabled = !this.SelectedTaskModelControl.IsSelectedTaskModelTracked
             };
 
             this.SetCurrentTaskModelCommand = new Command<TaskModel>(this.SetCurrentTaskModel);
@@ -136,10 +137,10 @@ namespace TimeTrackerUI.ViewModels
             this.SelectedTaskModelControl.SelectedTaskModel = taskModel;
             this.StartEndToggleControl.CanStart = true;
 
-            if (this.TaskModels.Contains(taskModel))
-                this.SelectedTaskModelControl.IsSelectedTaskModelTracked = true;
-            else
-                this.SelectedTaskModelControl.IsSelectedTaskModelTracked = false;
+            this.SelectedTaskModelControl.IsSelectedTaskModelTracked = this.TaskModels.Contains(taskModel);
+            this.CurrentTaskModelType = this.SelectedTaskModelControl.IsSelectedTaskModelTracked ? this.SelectedTaskModelControl.SelectedTaskModel.Type : this.TaskModelTypes[0];
+            this.StartEndToggleControl.IsEnabled = !this.SelectedTaskModelControl.IsSelectedTaskModelTracked;
+
             this.Save();
         }
 

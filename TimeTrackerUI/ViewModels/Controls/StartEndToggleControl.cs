@@ -27,6 +27,18 @@ namespace TimeTrackerUI.ViewModels.Controls
             }
         }
 
+        private bool _isEnabled;
+
+        public bool IsEnabled
+        {
+            get { return this._isEnabled; }
+            set
+            {
+                this._isEnabled = value;
+                this.OnPropertyChanged(nameof(this.IsEnabled));
+            }
+        }
+
         private string _content;
 
         public string Content

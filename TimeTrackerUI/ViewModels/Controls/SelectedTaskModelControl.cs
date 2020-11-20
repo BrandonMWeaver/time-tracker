@@ -31,6 +31,7 @@ namespace TimeTrackerUI.ViewModels.Controls
                 this._isSelectedTaskModelTracked = value;
                 this.AddButtonVisibility = value ? Visibility.Hidden : Visibility.Visible;
                 this.ManipulatorButtonVisibility = value ? Visibility.Visible : Visibility.Hidden;
+                this.BackgroundColor = value ? "#CDCDFF" : "#CDCDCD";
                 this.OnPropertyChanged(nameof(this.IsSelectedTaskModelTracked));
             }
         }
@@ -56,6 +57,18 @@ namespace TimeTrackerUI.ViewModels.Controls
             {
                 this._manipulatorButtonVisibility = value;
                 this.OnPropertyChanged(nameof(this.ManipulatorButtonVisibility));
+            }
+        }
+
+        private string _backgroundColor;
+
+        public string BackgroundColor
+        {
+            get { return this._backgroundColor; }
+            set
+            {
+                this._backgroundColor = value;
+                this.OnPropertyChanged(nameof(this.BackgroundColor));
             }
         }
 
