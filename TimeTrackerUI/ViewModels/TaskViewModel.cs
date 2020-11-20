@@ -70,7 +70,9 @@ namespace TimeTrackerUI.ViewModels
         public TaskViewModel()
         {
             string applicationJson;
-            using (StreamReader sr = new StreamReader("../../../Storage/Data.json"))
+            if (!File.Exists("data.json"))
+                File.Create("data.json");
+            using (StreamReader sr = new StreamReader("data.json"))
             {
                 applicationJson = sr.ReadToEnd();
             }
@@ -82,7 +84,8 @@ namespace TimeTrackerUI.ViewModels
                 {
                     TaskModels = new TaskModel[0],
                     CurrentTaskModel = new TaskModel(),
-                    IsSelectedTaskModelTracked = false
+                    IsSelectedTaskModelTracked = false,
+                    CanStartEndToggleControlStart = true
                 };
             this.TaskModels = new ObservableCollection<TaskModel>(applicationState.TaskModels);
 
@@ -214,7 +217,7 @@ namespace TimeTrackerUI.ViewModels
                 IsSelectedTaskModelTracked = this.SelectedTaskModelControl.IsSelectedTaskModelTracked,
                 CanStartEndToggleControlStart = this.StartEndToggleControl.CanStart
             });
-            File.WriteAllText("../../../Storage/Data.json", json);
+            File.WriteAllText("data.json", json);
         }
 
         private string ReportString()
