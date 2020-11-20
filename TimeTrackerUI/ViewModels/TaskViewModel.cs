@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Windows;
 using TimeTrackerUI.Models;
 using TimeTrackerUI.Models.Base;
 using TimeTrackerUI.ViewModels.Commands;
@@ -65,6 +66,7 @@ namespace TimeTrackerUI.ViewModels
         public ParameterlessCommand AddCommand { get; set; }
         public ParameterlessCommand UpdateCommand { get; set; }
         public ParameterlessCommand RemoveCommand { get; set; }
+        public ParameterlessCommand CopyReportCommand { get; set; }
         public ParameterlessCommand GenerateReportCommand { get; set; }
 
         public TaskViewModel()
@@ -120,6 +122,7 @@ namespace TimeTrackerUI.ViewModels
             this.AddCommand = new ParameterlessCommand(this.Add);
             this.UpdateCommand = new ParameterlessCommand(this.Update);
             this.RemoveCommand = new ParameterlessCommand(this.Remove);
+            this.CopyReportCommand = new ParameterlessCommand(this.CopyReport);
             this.GenerateReportCommand = new ParameterlessCommand(this.GenerateReport);
         }
 
@@ -226,6 +229,11 @@ namespace TimeTrackerUI.ViewModels
             foreach (TaskModel taskModel in this.TaskModels)
                 reportString = $"{reportString}{taskModel}\n";
             return $"{reportString}{this.TimeTotalString}";
+        }
+
+        private void CopyReport()
+        {
+            Clipboard.SetDataObject(this.ReportString(), true);
         }
 
         private void GenerateReport()
